@@ -14,7 +14,7 @@
 
         <div class="col-10">
             <div class="header">
-                <img src="assets/images/ConnectLife_logo.jpg" class="logoConnectLife" alt="logo connectLife">
+                <img src="assets/images/logo_connectLife.png" class="logoConnectLife" alt="logo connectLife">
             </div>
             <div class="formulaire">
 
