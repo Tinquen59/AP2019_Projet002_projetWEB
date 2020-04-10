@@ -17,6 +17,7 @@
                 <img src="assets/images/ConnectLife_logo.jpg" class="logoConnectLife" alt="logo connectLife">
             </div>
             <div class="formulaire">
+
                 <form action="">
 
                     <div class="form-group">
@@ -35,42 +36,47 @@
 
                     <!--         POUR LE PARTICULIER INVERSER LE NOM ET LE PRENOM          -->
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="nom">Nom * :</label>
                         <div class="col-sm-8">
-                            <input id="nom" class="form-control" minlength="2" maxlength="100"  type="text" required>
+                            <input id="nom" class="form-control" type="text">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="prenom">Prénom * :</label>
                         <div class="col-sm-8">
-                            <input id="prenom" class="form-control" minlength="2" maxlength="100"  type="text" required>
+                            <input id="prenom" class="form-control" type="text">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
                     <!--         POUR LE PARTICULIER           -->
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="nomSociete">Nom de la société * :</label>
                         <div class="col-sm-8">
-                            <input id="nomSociete" class="form-control"  minlength="2" maxlength="100" type="text" required>
+                            <input id="nomSociete" class="form-control"  minlength="2" maxlength="100" type="text">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="posteOccupe">Poste occupé * :</label>
                         <div class="col-sm-8">
-                            <input id="posteOccupe" class="form-control" minlength="2" maxlength="100"  type="text" required>
+                            <input id="posteOccupe" class="form-control" minlength="2" maxlength="100"  type="text">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
                     <!--         FIN            -->
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="Adresse1">Adresse 1 * :</label>
                         <div class="col-sm-8">
-                            <input id="Adresse1" class="form-control" minlength="2" maxlength="100"  type="text" required>
+                            <input id="Adresse1" class="form-control" type="text">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
@@ -84,15 +90,18 @@
                     <div class="form-group row">
                         <label class="col-sm-4" for="codePostal">codePostal * :</label>
                         <div class="col-sm-4">
-                            <input id="codePostal" class="form-control" minlength="5" maxlength="5"  type="text" required>
+                            <input id="codePostal" class="form-control" minlength="5" maxlength="5"  type="text">
+                            <div id="mailError"></div>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-4" for="ville">Ville :</label>
-                        <select class="form-control col-sm-8" name="ville" id="ville" required>
-                            <option value=""></option>
-                        </select>
+                        <div class="col-sm-8">
+                            <select class="form-control col-sm-8" name="ville" id="ville">
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
 
                     <!--         POUR LE PARTICULIER           -->
@@ -117,26 +126,29 @@
 
                     <!--         POUR LE PROFESSIONNEL           -->
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="telSociete">Téléphone société * :</label>
                         <div class="col-sm-8">
-                            <input id="telSociete" class="form-control" minlength="2" maxlength="100" type="text" required>
+                            <input id="telSociete" class="form-control" type="tel">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="telDirecte">Téléphone Directe * :</label>
                         <div class="col-sm-8">
-                            <input id="telDirecte" class="form-control" minlength="2" maxlength="100" type="text" required>
+                            <input id="telDirecte" class="form-control" type="tel">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 
                     <!--         FIN            -->
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="mail">Email * :</label>
                         <div class="col-sm-8">
-                            <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text" required>
+                            <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text">
+                            <p class="messageError"></p>
                         </div>
                     </div>
 
@@ -147,6 +159,7 @@
                     <button class="btn btn-outline-light float-right" type="submit">Valider</button>
 
                 </form>
+
             </div>
         </div>
 
