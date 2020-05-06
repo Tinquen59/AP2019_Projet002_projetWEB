@@ -87,11 +87,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row divError">
                         <label class="col-sm-4" for="codePostal">codePostal * :</label>
                         <div class="col-sm-4">
-                            <input id="codePostal" class="form-control" minlength="5" maxlength="5"  type="text">
-                            <div id="mailError"></div>
+                            <input id="codePostal" class="form-control" maxlength="5"  type="text">
+                            <div class="messageError m-0"></div>
                         </div>
                     </div>
 

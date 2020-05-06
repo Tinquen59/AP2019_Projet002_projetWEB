@@ -20,6 +20,10 @@ let typeErrors = [
         nameError: 'une adresse'
     },
     {
+        regexVerif: /^\d{5}$/i,
+        nameError: 'un code postal existant'
+    },
+    {
         regexVerif: /^\d{10}$/i,
         nameError: 'un numéro de téléphone valide'
     },
@@ -33,11 +37,13 @@ let typeErrors = [
     }
 ]
 
+const inputCodepostal = document.getElementById('codePostal')
+const selectVille = document.getElementById('ville')
 
 document.querySelector('form').addEventListener('submit', function (e) {
     e.preventDefault()
 
-    let divFormGroup = document.querySelectorAll('div .divError')
+    const divFormGroup = document.querySelectorAll('div .divError')
 
     for (let i = 0; i < divFormGroup.length; i++) {
         if (!typeErrors[i].regexVerif.test(divFormGroup[i].querySelector('input').value)) {
@@ -49,21 +55,25 @@ document.querySelector('form').addEventListener('submit', function (e) {
         }
     }
 
-
 })
 
 
-let xhr = new XMLHttpRequest()
+inputCodepostal.addEventListener('input', () => {
+    const xhr = new XMLHttpRequest()
 
-xhr.open('GET', 'https://unpkg.com/codes-postaux@3.3.0/codes-postaux.json')
+    xhr.open('GET', 'https://unpkg.com/codes-postaux@3.3.0/codes-postaux.json')
 
-xhr.onload = function () {
-    let resultatCodePostaux = JSON.parse(this.responseText)
-    resultatCodePostaux.forEach(function (resultatCodePostal) {
-        if (document.getElementById('codePostal').value === resultatCodePostal.codePostal) {
-            document.getElementById('ville').innerHTML += `<option>${resultatCodePostal.nomCommune}</option>`
-        }
-    })
-}
+    xhr.onload = function () {
+        let resultatCodePostaux = JSON.parse(this.responseText)
 
-xhr.send()
+        resultatCodePostaux.forEach(function (resultatCodePostal) {
+            if (inputCodepostal.value === resultatCodePostal.codePostal && inputCodepostal.value.length === 5) {
+                selectVille.innerHTML += `<option>${resultatCodePostal.nomCommune}</option>`
+            } else if (inputCodepostal.value.length !== 5) {
+                selectVille.innerHTML = '<option></option>'
+            }
+        })
+    }
+
+    xhr.send()
+})
