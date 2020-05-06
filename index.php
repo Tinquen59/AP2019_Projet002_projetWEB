@@ -9,10 +9,11 @@
     </head>
 <body>
 
-    <div class="container">
-        <div class="col-1"></div>
+<div class="col-2"></div>
 
-        <div class="col-10">
+    <div class="container col-10">
+
+        <div class="col-12">
             <div class="header">
                 <img src="assets/images/logo_connectLife.png" class="logoConnectLife" alt="logo connectLife">
             </div>
@@ -20,11 +21,11 @@
 
                 <form action="">
 
-                    <div class="form-group">
-                        <div class="form-check form-check-inline">
+                    <div class="form-group d-flex flex-column flex-sm-row">
+                        <div class="form-check form-check-inline col-sm-4">
                             <span>Civilité * :</span>
                         </div>
-                        <div class="ml-5 form-check form-check-inline">
+                        <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="madame" value="madame">
                             <label class="form-check-label" for="madame">Madame</label>
                         </div>
@@ -98,7 +99,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4" for="ville">Ville :</label>
                         <div class="col-sm-8">
-                            <select class="form-control col-sm-8" name="ville" id="ville">
+                            <select class="form-control" name="ville" id="ville">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -163,8 +164,9 @@
             </div>
         </div>
 
-        <div class="col-1"></div>
     </div>
+
+<div class="col-2"></div>
 
 
     <script src="assets/js/formulaire.js"></script>
