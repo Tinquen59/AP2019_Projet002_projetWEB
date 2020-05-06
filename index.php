@@ -6,6 +6,13 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <title>ProjetWeb</title>
         <link rel="stylesheet" href="assets/css/style.css">
+        <style>
+            input[type="radio"] {
+                -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
+                -moz-appearance: checkbox;    /* Firefox */
+                -ms-appearance: checkbox;     /* not currently supported */
+            }
+        </style>
     </head>
 <body>
 
@@ -21,16 +28,16 @@
 
                 <form action="">
 
-                    <div class="form-group d-flex flex-column flex-sm-row">
+                    <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                         <div class="form-check form-check-inline col-sm-4">
                             <span>Civilité * :</span>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="madame" value="madame">
+                            <input class="form-check-input" type="radio" id="madame" name="radio" value="madame">
                             <label class="form-check-label" for="madame">Madame</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="monsieur" value="monsieur">
+                            <input class="form-check-input" type="radio" id="monsieur" name="radio" value="monsieur">
                             <label class="form-check-label" for="monsieur">Monsieur</label>
                         </div>
                     </div>

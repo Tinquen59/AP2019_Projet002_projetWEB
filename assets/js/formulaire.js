@@ -77,3 +77,30 @@ inputCodepostal.addEventListener('input', () => {
 
     xhr.send()
 })
+
+
+/*const checkCivilite = document.getElementById('civilite')
+
+const checkMadame = document.getElementById('madame')
+const checkMonsieur = document.getElementById('monsieur')
+
+// console.log(checkMadame.checked)
+// console.log(checkMonsieur.checked)
+
+checkCivilite.addEventListener('input', () => {
+    if (checkMadame.checked === true && checkMonsieur.checked === false) {
+        console.warn('madame')
+        if (checkMonsieur.checked === true) {
+            console.error('madame false')
+            checkMadame.checked = false
+        }
+    } else if (checkMonsieur.checked === true && checkMadame.checked === false) {
+        console.warn('monsieur')
+        if (checkMadame.checked === true) {
+            checkMonsieur.checked = false
+        }
+    }
+
+    console.log('madame ' + checkMadame.checked)
+    console.log('monsieur ' + checkMonsieur.checked)
+})*/
