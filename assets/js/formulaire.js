@@ -93,7 +93,7 @@ function verifVille() {
 
     if (selectVille.value.length < 2) {
         selectVille.style.borderColor = '#dc3545'
-        messageErrorVille.innerHTML = '<p class="text-danger">Veuillez choisir de ville dans la liste.</p>'
+        messageErrorVille.innerHTML = '<p class="text-danger mb-0">Veuillez choisir de ville dans la liste.</p>'
     } else {
         messageErrorVille.innerHTML = ''
         selectVille.style.borderColor = 'green'

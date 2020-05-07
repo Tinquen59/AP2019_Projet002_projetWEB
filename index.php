@@ -211,6 +211,7 @@ $guid = $requeteGuid->fetch();
                                 <select class="form-control" name="ville" id="ville">
                                     <option value=""></option>
                                 </select>
+                                <div id="messageErrorVille" class="m-0"></div>
                             </div>
                         </div>
 
