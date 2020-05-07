@@ -1,3 +1,11 @@
+<?php
+require ('assets/requete/bdd.php');
+
+$requeteGuid = $bdd->prepare('SELECT * FROM guid WHERE GUID = :GUID');
+$requeteGuid->execute(array(':GUID' => $_GET['idUser']));
+$guid = $requeteGuid->fetch();
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -6,13 +14,6 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <title>ProjetWeb</title>
         <link rel="stylesheet" href="assets/css/style.css">
-        <style>
-            input[type="radio"] {
-                -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
-                -moz-appearance: checkbox;    /* Firefox */
-                -ms-appearance: checkbox;     /* not currently supported */
-            }
-        </style>
     </head>
 <body>
 
@@ -26,147 +27,226 @@
             </div>
             <div class="formulaire">
 
-                <form action="">
-
-                    <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
-                        <div class="form-check form-check-inline col-sm-4">
-                            <span>Civilité * :</span>
+                <?php if ($guid['IsSociete'] == 0): ?>
+                    <form action="">
+                        <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
+                            <div class="form-check form-check-inline col-sm-4">
+                                <span>Civilité * :</span>
+                            </div>
+                            <div class="col-sm-8 pl-0">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="madame" name="radio" value="madame">
+                                    <label class="form-check-label" for="madame">Madame</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="monsieur" name="radio" value="monsieur">
+                                    <label class="form-check-label" for="monsieur">Monsieur</label>
+                                </div>
+                                <div id="messageErrorCivilite" class="m-0"></div>
+                            </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="madame" name="radio" value="madame">
-                            <label class="form-check-label" for="madame">Madame</label>
+
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="prenom">Prénom * :</label>
+                            <div class="col-sm-8">
+                                <input id="prenom" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="monsieur" name="radio" value="monsieur">
-                            <label class="form-check-label" for="monsieur">Monsieur</label>
+
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="nom">Nom * :</label>
+                            <div class="col-sm-8">
+                                <input id="nom" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--         POUR LE PARTICULIER INVERSER LE NOM ET LE PRENOM          -->
-
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="nom">Nom * :</label>
-                        <div class="col-sm-8">
-                            <input id="nom" class="form-control" type="text">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="Adresse1">Adresse 1 * :</label>
+                            <div class="col-sm-8">
+                                <input id="Adresse1" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="prenom">Prénom * :</label>
-                        <div class="col-sm-8">
-                            <input id="prenom" class="form-control" type="text">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="Adresse2">Adresse 2 :</label>
+                            <div class="col-sm-8">
+                                <input id="Adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
+                            </div>
                         </div>
-                    </div>
 
-                    <!--         POUR LE PARTICULIER           -->
-
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="nomSociete">Nom de la société * :</label>
-                        <div class="col-sm-8">
-                            <input id="nomSociete" class="form-control"  minlength="2" maxlength="100" type="text">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="codePostal">codePostal * :</label>
+                            <div class="col-sm-4">
+                                <input id="codePostal" class="form-control" maxlength="5"  type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="posteOccupe">Poste occupé * :</label>
-                        <div class="col-sm-8">
-                            <input id="posteOccupe" class="form-control" minlength="2" maxlength="100"  type="text">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="ville">Ville * :</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="ville" id="ville">
+                                    <option value=""></option>
+                                </select>
+                                <div id="messageErrorVille" class="m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--         FIN            -->
-
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="Adresse1">Adresse 1 * :</label>
-                        <div class="col-sm-8">
-                            <input id="Adresse1" class="form-control" type="text">
-                            <div class="messageError m-0"></div>
+                        <div class="col-sm-8 pl-0">
+                            <p class="mb-0">Remplissez au moins un numéro de téléphone *</p>
+                            <div id="messageErrorNumTelParticulier" class="m-0"></div>
                         </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="Adresse2">Adresse 2 :</label>
-                        <div class="col-sm-8">
-                            <input id="Adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
+                        <div class="form-group row divError mt-3">
+                            <label class="col-sm-4" for="telFixe">Téléphone fixe :</label>
+                            <div class="col-sm-8">
+                                <input id="telFixe" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="codePostal">codePostal * :</label>
-                        <div class="col-sm-4">
-                            <input id="codePostal" class="form-control" maxlength="5"  type="text">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="telPortable">Téléphone portable :</label>
+                            <div class="col-sm-8">
+                                <input id="telPortable" class="form-control"type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="ville">Ville :</label>
-                        <div class="col-sm-8">
-                            <select class="form-control" name="ville" id="ville">
-                                <option value=""></option>
-                            </select>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="mail">Email * :</label>
+                            <div class="col-sm-8">
+                                <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--         POUR LE PARTICULIER           -->
-
-                    <p>Remplissez au moins un numéro de téléphone *</p>
-
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="telFixe">Téléphone fixe :</label>
-                        <div class="col-sm-8">
-                            <input id="telFixe" class="form-control" type="text">
+                        <div>
+                            <p class="font-italic text-right">* : champ à saisie obligatoire</p>
                         </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="telPortable">Téléphone portable :</label>
-                        <div class="col-sm-8">
-                            <input id="telPortable" class="form-control" minlength="2" maxlength="100" type="text">
+                        <button class="btn btn-outline-light float-right" type="submit">Valider</button>
+                    </form>
+
+                <?php elseif ($guid['IsSociete'] == 1): ?>
+                    <form action="">
+                        <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
+                            <div class="form-check form-check-inline col-sm-4">
+                                <span>Civilité * :</span>
+                            </div>
+                            <div class="col-sm-8 pl-0">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="madame" name="radio" value="madame">
+                                    <label class="form-check-label" for="madame">Madame</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="monsieur" name="radio" value="monsieur">
+                                    <label class="form-check-label" for="monsieur">Monsieur</label>
+                                </div>
+                                <div id="messageErrorCivilite" class="m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--         FIN            -->
-
-                    <!--         POUR LE PROFESSIONNEL           -->
-
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="telSociete">Téléphone société * :</label>
-                        <div class="col-sm-8">
-                            <input id="telSociete" class="form-control" type="tel">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="nom">Nom * :</label>
+                            <div class="col-sm-8">
+                                <input id="nom" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="telDirecte">Téléphone Directe * :</label>
-                        <div class="col-sm-8">
-                            <input id="telDirecte" class="form-control" type="tel">
-                            <div class="messageError m-0"></div>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="prenom">Prénom * :</label>
+                            <div class="col-sm-8">
+                                <input id="prenom" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--         FIN            -->
-
-                    <div class="form-group row divError">
-                        <label class="col-sm-4" for="mail">Email * :</label>
-                        <div class="col-sm-8">
-                            <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text">
-                            <p class="messageError"></p>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="nomSociete">Nom de la société * :</label>
+                            <div class="col-sm-8">
+                                <input id="nomSociete" class="form-control"  minlength="2" maxlength="100" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div>
-                        <p class="font-italic text-right">* : champ obligatoire</p>
-                    </div>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="posteOccupe">Poste occupé * :</label>
+                            <div class="col-sm-8">
+                                <input id="posteOccupe" class="form-control" minlength="2" maxlength="100"  type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
+                        </div>
 
-                    <button class="btn btn-outline-light float-right" type="submit">Valider</button>
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="Adresse1">Adresse 1 * :</label>
+                            <div class="col-sm-8">
+                                <input id="Adresse1" class="form-control" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
+                        </div>
 
-                </form>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="Adresse2">Adresse 2 :</label>
+                            <div class="col-sm-8">
+                                <input id="Adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="codePostal">codePostal * :</label>
+                            <div class="col-sm-4">
+                                <input id="codePostal" class="form-control" maxlength="5"  type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="ville">Ville * :</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="ville" id="ville">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="telSociete">Téléphone société * :</label>
+                            <div class="col-sm-8">
+                                <input id="telSociete" class="form-control" type="tel">
+                                <div class="messageError m-0"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="telDirecte">Téléphone Directe * :</label>
+                            <div class="col-sm-8">
+                                <input id="telDirecte" class="form-control" type="tel">
+                                <div class="messageError m-0"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row divError">
+                            <label class="col-sm-4" for="mail">Email * :</label>
+                            <div class="col-sm-8">
+                                <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text">
+                                <div class="messageError m-0"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="font-italic text-right">* : champ à saisie obligatoire</p>
+                        </div>
+
+                        <button class="btn btn-outline-light float-right" type="submit">Valider</button>
+                    </form>
+
+                <?php endif; ?>
+
 
             </div>
         </div>
