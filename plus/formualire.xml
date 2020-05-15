@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bibliotheque>
+  <GUID>
+    <GUID>Fantini</GUID>
+    <Nom>Francois</Nom>
+    <Email>1991-08-01</Email>
+    <IsSociete>1</IsSociete>
+  </GUID>
+  <clients>
+    <IdClient/>
+    <Civilite/>
+    <Prenom/>
+    <Nom>Francois</Nom>
+    <PosteOccupe/>
+    <Adresse1/>
+    <Adresse2/>
+    <TelephoneFixe/>
+    <TelephonePortable/>
+    <GUID>Fantini</GUID>
+    <CodePostal/>
+    <NomVille/>
+    <NomSociete/>
+    <TelephoneFixe/>
+    <TelephoneSociete/>
+  </clients>
+</bibliotheque>
