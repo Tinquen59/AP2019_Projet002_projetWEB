@@ -2,7 +2,7 @@
 require ('assets/requete/bdd.php');
 
 $requeteGuid = $bdd->prepare('SELECT * FROM guid WHERE GUID = :GUID');
-$requeteGuid->execute(array(':GUID' => $_GET['idUser']));
+$requeteGuid->execute(array(':GUID' => $_GET['q']));
 $guid = $requeteGuid->fetch();
 ?>
 
@@ -27,19 +27,27 @@ $guid = $requeteGuid->fetch();
             </div>
             <div class="formulaire">
 
-                <?php if ($guid['IsSociete'] == 0): ?>
+                <?php if (isset($guid['IsSociete']) && $guid['IsSociete'] == 0): ?>
                     <form action="">
+                        <div id="submitError" class="alert alert-danger">
+                            Le formulaire a déjà été envoyé
+                        </div>
+
+                        <div id="submitSuccess" class="alert alert-success">
+                            Le formulaire a bien été envoyé
+                        </div>
+
                         <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                             <div class="form-check form-check-inline col-sm-4">
                                 <span>Civilité * :</span>
                             </div>
                             <div class="col-sm-8 pl-0">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="madame" name="radio" value="madame">
+                                    <input class="form-check-input" type="radio" id="madame" name="civilite" value="madame">
                                     <label class="form-check-label" for="madame">Madame</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="monsieur" name="radio" value="monsieur">
+                                    <input class="form-check-input" type="radio" id="monsieur" name="civilite" value="monsieur">
                                     <label class="form-check-label" for="monsieur">Monsieur</label>
                                 </div>
                                 <div id="messageErrorCivilite" class="m-0"></div>
@@ -49,7 +57,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="prenom">Prénom * :</label>
                             <div class="col-sm-8">
-                                <input id="prenom" class="form-control" type="text">
+                                <input id="prenom" name="prenom" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -57,7 +65,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="nom">Nom * :</label>
                             <div class="col-sm-8">
-                                <input id="nom" class="form-control" type="text">
+                                <input id="nom" name="nom" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -65,7 +73,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="Adresse1">Adresse 1 * :</label>
                             <div class="col-sm-8">
-                                <input id="Adresse1" class="form-control" type="text">
+                                <input id="Adresse1" name="adresse1" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -73,14 +81,14 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row">
                             <label class="col-sm-4" for="Adresse2">Adresse 2 :</label>
                             <div class="col-sm-8">
-                                <input id="Adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
+                                <input id="Adresse2" name="adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
                             </div>
                         </div>
 
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="codePostal">codePostal * :</label>
                             <div class="col-sm-4">
-                                <input id="codePostal" class="form-control" maxlength="5"  type="text">
+                                <input id="codePostal" name="codePostal" class="form-control" maxlength="5"  type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -103,7 +111,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError mt-3">
                             <label class="col-sm-4" for="telFixe">Téléphone fixe :</label>
                             <div class="col-sm-8">
-                                <input id="telFixe" class="form-control" type="text">
+                                <input id="telFixe" name="telephoneFixe" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -111,7 +119,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="telPortable">Téléphone portable :</label>
                             <div class="col-sm-8">
-                                <input id="telPortable" class="form-control"type="text">
+                                <input id="telPortable" name="telephonePortable" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -119,7 +127,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="mail">Email * :</label>
                             <div class="col-sm-8">
-                                <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text">
+                                <input id="mail" name="email" class="form-control"  minlength="2" maxlength="100" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -131,19 +139,27 @@ $guid = $requeteGuid->fetch();
                         <button class="btn btn-outline-light float-right" type="submit">Valider</button>
                     </form>
 
-                <?php elseif ($guid['IsSociete'] == 1): ?>
+                <?php elseif (isset($guid['IsSociete']) && $guid['IsSociete'] == 1): ?>
                     <form action="">
+                        <div id="submitError" class="alert alert-danger">
+                            Le formulaire a déjà été envoyé
+                        </div>
+
+                        <div id="submitSuccess" class="alert alert-success">
+                            Le formulaire a bien été envoyé
+                        </div>
+
                         <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                             <div class="form-check form-check-inline col-sm-4">
                                 <span>Civilité * :</span>
                             </div>
                             <div class="col-sm-8 pl-0">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="madame" name="radio" value="madame">
+                                    <input class="form-check-input" type="radio" id="madame" name="civilite" value="madame">
                                     <label class="form-check-label" for="madame">Madame</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="monsieur" name="radio" value="monsieur">
+                                    <input class="form-check-input" type="radio" id="monsieur" name="civilite" value="monsieur">
                                     <label class="form-check-label" for="monsieur">Monsieur</label>
                                 </div>
                                 <div id="messageErrorCivilite" class="m-0"></div>
@@ -153,7 +169,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="nom">Nom * :</label>
                             <div class="col-sm-8">
-                                <input id="nom" class="form-control" type="text">
+                                <input id="nom" name="nom" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -161,7 +177,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="prenom">Prénom * :</label>
                             <div class="col-sm-8">
-                                <input id="prenom" class="form-control" type="text">
+                                <input id="prenom" name="prenom" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -169,7 +185,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="nomSociete">Nom de la société * :</label>
                             <div class="col-sm-8">
-                                <input id="nomSociete" class="form-control"  minlength="2" maxlength="100" type="text">
+                                <input id="nomSociete" name="nomSociete" class="form-control"  minlength="2" maxlength="100" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -177,7 +193,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="posteOccupe">Poste occupé * :</label>
                             <div class="col-sm-8">
-                                <input id="posteOccupe" class="form-control" minlength="2" maxlength="100"  type="text">
+                                <input id="posteOccupe" name="posteOccupe" class="form-control" minlength="2" maxlength="100"  type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -185,7 +201,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="Adresse1">Adresse 1 * :</label>
                             <div class="col-sm-8">
-                                <input id="Adresse1" class="form-control" type="text">
+                                <input id="Adresse1" name="adresse1" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -193,14 +209,14 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row">
                             <label class="col-sm-4" for="Adresse2">Adresse 2 :</label>
                             <div class="col-sm-8">
-                                <input id="Adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
+                                <input id="Adresse2" name="Adresse2" class="form-control" minlength="2" maxlength="100"  type="text">
                             </div>
                         </div>
 
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="codePostal">codePostal * :</label>
                             <div class="col-sm-4">
-                                <input id="codePostal" class="form-control" maxlength="5"  type="text">
+                                <input id="codePostal" name="codePostal" class="form-control" maxlength="5"  type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -218,15 +234,15 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="telSociete">Téléphone société * :</label>
                             <div class="col-sm-8">
-                                <input id="telSociete" class="form-control" type="tel">
+                                <input id="telSociete" name="telephoneSociete" class="form-control" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
 
                         <div class="form-group row divError">
-                            <label class="col-sm-4" for="telDirecte">Téléphone Directe * :</label>
+                            <label class="col-sm-4" for="telDirecte">Téléphone Direct * :</label>
                             <div class="col-sm-8">
-                                <input id="telDirecte" class="form-control" type="tel">
+                                <input id="telDirecte" name="telephoneDirect" class="form-control" type="tel">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -234,7 +250,7 @@ $guid = $requeteGuid->fetch();
                         <div class="form-group row divError">
                             <label class="col-sm-4" for="mail">Email * :</label>
                             <div class="col-sm-8">
-                                <input id="mail" class="form-control"  minlength="2" maxlength="100" type="text">
+                                <input id="mail" name="email" class="form-control"  minlength="2" maxlength="100" type="text">
                                 <div class="messageError m-0"></div>
                             </div>
                         </div>
@@ -246,6 +262,10 @@ $guid = $requeteGuid->fetch();
                         <button class="btn btn-outline-light float-right" type="submit">Valider</button>
                     </form>
 
+                <?php elseif (!isset($guid['IsSociete'])): ?>
+                    <div class="alert alert-danger mt-5">
+                        <h1 class="text-center">Une erreur est survenue</h1>
+                    </div>
                 <?php endif; ?>
 
 
