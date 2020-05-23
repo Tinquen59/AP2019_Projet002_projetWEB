@@ -1,4 +1,4 @@
-// les erreurs pour le formulaire du particulier
+// la plupart des erreurs pour le formulaire du particulier
 let typeErrorsParticulier = [
     {
         regexVerif: /[a-z]{2}/i,
@@ -30,7 +30,7 @@ let typeErrorsParticulier = [
     }
 ]
 
-// les erreurs pour le formulaire du professionnel
+// la plupart des erreurs pour le formulaire du professionnel
 let typeErrorsProfessionnel = [
     {
         regexVerif: /[a-z]{2}/i,
@@ -71,14 +71,17 @@ let typeErrorsProfessionnel = [
 ]
 
 
+// Permet de vérifier si la civilité est coché
 function checkCivilite() {
     let checkMadame = document.getElementById('madame')
     let checkMonsieur = document.getElementById('monsieur')
     let messageErrorCivilite = document.getElementById('messageErrorCivilite')
 
+    //gère les messages d'erreur
     if (checkMadame.checked === false && checkMonsieur.checked === false) {
         checkMadame.style.borderColor = '#dc3545'
         checkMonsieur.style.borderColor = '#dc3545'
+        countError.push(error)
         messageErrorCivilite.innerHTML = '<p class="text-danger m-0">Veuillez indiquer votre civilité.</p>'
     } else {
         checkMadame.style.borderColor = '#fff'
@@ -87,34 +90,72 @@ function checkCivilite() {
     }
 }
 
+
+// Vérifie la ville
 function verifVille() {
     let selectVille = document.getElementById('ville')
     let messageErrorVille = document.getElementById('messageErrorVille')
 
+    // gère les messages d'erreur
     if (selectVille.value.length < 2) {
         selectVille.style.borderColor = '#dc3545'
+        countError.push(error)
         messageErrorVille.innerHTML = '<p class="text-danger mb-0">Veuillez choisir de ville dans la liste.</p>'
     } else {
         messageErrorVille.innerHTML = ''
         selectVille.style.borderColor = 'green'
     }
 }
-
+// vérifie pour le particulier si au moins un numéro est rempli
 function verifNumTelParticulier() {
     let messageErrorNumTelParticulier = document.getElementById('messageErrorNumTelParticulier')
 
     if (document.getElementById('telFixe').value.length < 10 || document.getElementById('telPortable').value.length < 10) {
         messageErrorNumTelParticulier.innerHTML = '<p class="text-danger">Veuillez indiquer au moins un numéro de téléphone.</p>'
+        countError.push(error)
     } else {
         messageErrorNumTelParticulier.innerHTML = ''
     }
 }
 
+function envoiFormulaire() {
+    let compareGUID = url.split('=')    // Permet de récupérer que le GUID dans l'url sans la variable
+    window.scrollTo(0, 0)   // Permet de remonter en haut de la page sans recharger la page
 
-let url = window.location.search // permet de recuperer dans l'url "idUser"
+    if (countError.length === 0) {
+        const xhrCompared = new XMLHttpRequest()
+        xhrCompared.open('GET', 'assets/requete/gestionnaire.php' + url + '&compared')
+        xhrCompared.onload = function () {
+            let responseCompared = JSON.parse(this.responseText)
+
+            if (compareGUID[1] === responseCompared.GUID) {
+                submitError.style.display = 'block'     //si le formulaire a déjà été envoyer dans la base de donnée
+                submitSuccess.style.display = 'none'
+            } else {
+                let formData = new FormData(document.querySelector("form"))     //si le formulaire n'a pas encore été envoyé dans la base de donnée
+
+                let xhrPost = new XMLHttpRequest()
+                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')
+                xhrPost.onload = function () {
+                }
+                xhrPost.send(formData)
+                submitSuccess.style.display = 'block'
+                submitError.style.display = 'none'
+                window.scrollTo(0, 0)
+            }
+        }
+        xhrCompared.send()
+    }
+}
+
+
+let url = window.location.search // permet de recuperer dans l'url "q=(le GUID)"
 
 const inputCodepostal = document.getElementById('codePostal')
 const selectVille = document.getElementById('ville')
+
+let countError = [] // Si le tableau est vide lors de l'envoi du formulaire alors on ajoute les informations à la base de donnée
+let error = 'Une erreur' // si il y a une erreur on ajoute error dans le tableau countError
 
 
 document.querySelector('form').addEventListener('submit', function (e) {
@@ -130,10 +171,13 @@ document.querySelector('form').addEventListener('submit', function (e) {
         if (resultatIsSociete.IsSociete == 0) {
             const divFormGroup = document.querySelectorAll('div .divError')
 
+            countError = []
+
             for (let i = 0; i < divFormGroup.length; i++) {
                 if (!typeErrorsParticulier[i].regexVerif.test(divFormGroup[i].querySelector('input').value)) {
                     divFormGroup[i].querySelector('input').style.borderColor = '#dc3545'
                     divFormGroup[i].querySelector('.messageError').innerHTML = `<p class="text-danger m-0">Veuillez indiquer ${typeErrorsParticulier[i].nameError}</p>`
+                    countError.push(error)
                 } else {
                     divFormGroup[i].querySelector('input').style.borderColor = 'green'
                     divFormGroup[i].querySelector('.messageError').innerHTML = ''
@@ -142,13 +186,31 @@ document.querySelector('form').addEventListener('submit', function (e) {
             checkCivilite()
             verifVille()
             verifNumTelParticulier()
+
+            /*if (countError.length === 0) {
+                console.log('test --- test')
+                let formData = new FormData(document.querySelector("form"))
+
+                let xhrPost = new XMLHttpRequest()
+                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')
+                xhrPost.onload = function () {
+                }
+                xhrPost.send(formData)
+                submitSuccess.style.display = 'block'
+                window.scrollTo(0, 0)
+            }*/
+            envoiFormulaire()
+
         } else if (resultatIsSociete.IsSociete == 1) {
             const divFormGroup = document.querySelectorAll('div .divError')
+
+            countError = []
 
             for (let i = 0; i < divFormGroup.length; i++) {
                 if (!typeErrorsProfessionnel[i].regexVerif.test(divFormGroup[i].querySelector('input').value)) {
                     divFormGroup[i].querySelector('input').style.borderColor = '#dc3545'
                     divFormGroup[i].querySelector('.messageError').innerHTML = `<p class="text-danger m-0">Veuillez indiquer ${typeErrorsProfessionnel[i].nameError}</p>`
+                    countError.push(error)
                 } else {
                     divFormGroup[i].querySelector('input').style.borderColor = 'green'
                     divFormGroup[i].querySelector('.messageError').innerHTML = ''
@@ -156,6 +218,20 @@ document.querySelector('form').addEventListener('submit', function (e) {
             }
             checkCivilite()
             verifVille()
+
+            /*if (countError.length === 0) {
+                let formData = new FormData(document.querySelector("form"))
+
+                let xhrPost = new XMLHttpRequest()
+                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')
+                xhrPost.onload = function () {
+                }
+                xhrPost.send(formData)
+                submitSuccess.style.display = 'block'
+                window.scrollTo(0, 0)
+            }*/
+            envoiFormulaire()
+
         }
     }
 
@@ -182,3 +258,9 @@ inputCodepostal.addEventListener('input', () => {
 
     xhr.send()
 })
+
+let submitError = document.getElementById('submitError')
+submitError.style.display = 'none'
+
+let submitSuccess = document.getElementById('submitSuccess')
+submitSuccess.style.display = 'none'
