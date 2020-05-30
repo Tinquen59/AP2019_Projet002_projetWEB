@@ -1,4 +1,5 @@
 // la plupart des erreurs pour le formulaire du particulier
+// permet de vérifier si le champ est correct sinon on affiche le message d'erreur
 let typeErrorsParticulier = [
     {
         regexVerif: /[a-z]{2}/i,
@@ -31,6 +32,7 @@ let typeErrorsParticulier = [
 ]
 
 // la plupart des erreurs pour le formulaire du professionnel
+// permet de vérifier si le champ est correct sinon on affiche le message d'erreur
 let typeErrorsProfessionnel = [
     {
         regexVerif: /[a-z]{2}/i,
@@ -79,13 +81,13 @@ function checkCivilite() {
 
     //gère les messages d'erreur
     if (checkMadame.checked === false && checkMonsieur.checked === false) {
-        checkMadame.style.borderColor = '#dc3545'
-        checkMonsieur.style.borderColor = '#dc3545'
+        checkMadame.style.borderColor = '#dc3545'   // change la couleur de la bordure en rouge
+        checkMonsieur.style.borderColor = '#dc3545'// change la couleur de la bordure en rouge
         countError.push(error)
-        messageErrorCivilite.innerHTML = '<p class="text-danger m-0">Veuillez indiquer votre civilité.</p>'
+        messageErrorCivilite.innerHTML = '<p class="text-danger m-0">Veuillez indiquer votre civilité.</p>' // affiche le message d'erreur
     } else {
-        checkMadame.style.borderColor = '#fff'
-        checkMonsieur.style.borderColor = '#fff'
+        checkMadame.style.borderColor = '#fff'  // change la couleur de la bordure en blanc
+        checkMonsieur.style.borderColor = '#fff'    // change la couleur de la bordure en blanc
         messageErrorCivilite.innerHTML = ''
     }
 }
@@ -98,12 +100,12 @@ function verifVille() {
 
     // gère les messages d'erreur
     if (selectVille.value.length < 2) {
-        selectVille.style.borderColor = '#dc3545'
-        countError.push(error)
-        messageErrorVille.innerHTML = '<p class="text-danger mb-0">Veuillez choisir de ville dans la liste.</p>'
+        selectVille.style.borderColor = '#dc3545'   // change la couleur de la bordure en rouge
+        countError.push(error)  // ajoute une erreur dans le tableau countError
+        messageErrorVille.innerHTML = '<p class="text-danger mb-0">Veuillez choisir de ville dans la liste.</p>'    // affiche le message d'erreur
     } else {
         messageErrorVille.innerHTML = ''
-        selectVille.style.borderColor = 'green'
+        selectVille.style.borderColor = 'green' // change la couleur de la bordure en vert
     }
 }
 // vérifie pour le particulier si au moins un numéro est rempli
@@ -118,10 +120,12 @@ function verifNumTelParticulier() {
     }
 }
 
+// permet d'envoyer le formulaire dans la base de donnée
 function envoiFormulaire() {
     let compareGUID = url.split('=')    // Permet de récupérer que le GUID dans l'url sans la variable
     window.scrollTo(0, 0)   // Permet de remonter en haut de la page sans recharger la page
 
+    // envoie le formulaire si le te tableau countError est vide
     if (countError.length === 0) {
         const xhrCompared = new XMLHttpRequest()
         xhrCompared.open('GET', 'assets/requete/gestionnaire.php' + url + '&compared')
@@ -129,19 +133,19 @@ function envoiFormulaire() {
             let responseCompared = JSON.parse(this.responseText)
 
             if (compareGUID[1] === responseCompared.GUID) {
-                submitError.style.display = 'block'     //si le formulaire a déjà été envoyer dans la base de donnée
+                submitError.style.display = 'block'     // affiche une erreur si le formulaire a déjà été envoyer dans la base de donnée
                 submitSuccess.style.display = 'none'
             } else {
                 let formData = new FormData(document.querySelector("form"))     //si le formulaire n'a pas encore été envoyé dans la base de donnée
 
                 let xhrPost = new XMLHttpRequest()
-                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')
+                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')   // permet d'envoyer les données à la base de donnée
                 xhrPost.onload = function () {
                 }
                 xhrPost.send(formData)
                 submitSuccess.style.display = 'block'
                 submitError.style.display = 'none'
-                window.scrollTo(0, 0)
+                window.scrollTo(0, 0)   // Permet de remonter tout en haut de la page
             }
         }
         xhrCompared.send()
@@ -163,20 +167,22 @@ document.querySelector('form').addEventListener('submit', function (e) {
 
     const xhr = new XMLHttpRequest()
 
-    xhr.open('GET', 'assets/requete/gestionnaire.php' + url)
+    xhr.open('GET', 'assets/requete/gestionnaire.php' + url)    // permet de récupérer IsSociete de la base de donnée
 
     xhr.onload = function () {
-        let resultatIsSociete = JSON.parse(this.responseText)
+        let resultatIsSociete = JSON.parse(this.responseText)   // transforme le JSON reçu en javascript
 
+        // permet de gérer les erreurs ou d'envoyer le formualire à la base de donnée selon le formulaire
         if (resultatIsSociete.IsSociete == 0) {
             const divFormGroup = document.querySelectorAll('div .divError')
 
-            countError = []
+            countError = [] // à chaque envoie du formulaire on réinitialise le tableau countError
 
+            // on répète l'opération tant qu'il y a une class html divError dans une div
             for (let i = 0; i < divFormGroup.length; i++) {
                 if (!typeErrorsParticulier[i].regexVerif.test(divFormGroup[i].querySelector('input').value)) {
-                    divFormGroup[i].querySelector('input').style.borderColor = '#dc3545'
-                    divFormGroup[i].querySelector('.messageError').innerHTML = `<p class="text-danger m-0">Veuillez indiquer ${typeErrorsParticulier[i].nameError}</p>`
+                    divFormGroup[i].querySelector('input').style.borderColor = '#dc3545'    // change la couleur de la bordure en rouge
+                    divFormGroup[i].querySelector('.messageError').innerHTML = `<p class="text-danger m-0">Veuillez indiquer ${typeErrorsParticulier[i].nameError}</p>` // affiche un message d'erreur en fonction de l'input incorect
                     countError.push(error)
                 } else {
                     divFormGroup[i].querySelector('input').style.borderColor = 'green'
@@ -187,21 +193,9 @@ document.querySelector('form').addEventListener('submit', function (e) {
             verifVille()
             verifNumTelParticulier()
 
-            /*if (countError.length === 0) {
-                console.log('test --- test')
-                let formData = new FormData(document.querySelector("form"))
-
-                let xhrPost = new XMLHttpRequest()
-                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')
-                xhrPost.onload = function () {
-                }
-                xhrPost.send(formData)
-                submitSuccess.style.display = 'block'
-                window.scrollTo(0, 0)
-            }*/
             envoiFormulaire()
 
-        } else if (resultatIsSociete.IsSociete == 1) {
+        } else if (resultatIsSociete.IsSociete == 1) {  // même chose que précédemment mais pour le formulaire du professionelle
             const divFormGroup = document.querySelectorAll('div .divError')
 
             countError = []
@@ -219,17 +213,6 @@ document.querySelector('form').addEventListener('submit', function (e) {
             checkCivilite()
             verifVille()
 
-            /*if (countError.length === 0) {
-                let formData = new FormData(document.querySelector("form"))
-
-                let xhrPost = new XMLHttpRequest()
-                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')
-                xhrPost.onload = function () {
-                }
-                xhrPost.send(formData)
-                submitSuccess.style.display = 'block'
-                window.scrollTo(0, 0)
-            }*/
             envoiFormulaire()
 
         }
@@ -239,19 +222,20 @@ document.querySelector('form').addEventListener('submit', function (e) {
 })
 
 
+// permet d'afficher les villes
 inputCodepostal.addEventListener('input', () => {
     const xhr = new XMLHttpRequest()
 
-    xhr.open('GET', 'https://unpkg.com/codes-postaux@3.3.0/codes-postaux.json') // recupère les codes postaux via une API
+    xhr.open('GET', 'https://unpkg.com/codes-postaux@3.3.0/codes-postaux.json') // recupère les codes postaux, villes... via une API
 
     xhr.onload = function () {
-        let resultatCodePostaux = JSON.parse(this.responseText)
+        let resultatCodePostaux = JSON.parse(this.responseText) // transforme le JSON en javascript
 
         resultatCodePostaux.forEach(function (resultatCodePostal) {
             if (inputCodepostal.value === resultatCodePostal.codePostal && inputCodepostal.value.length === 5) {
-                selectVille.innerHTML += `<option>${resultatCodePostal.nomCommune}</option>`
+                selectVille.innerHTML += `<option>${resultatCodePostal.nomCommune}</option>`    // affiche la ville que si le code postal est valide
             } else if (inputCodepostal.value.length !== 5) {
-                selectVille.innerHTML = '<option></option>'
+                selectVille.innerHTML = '<option></option>' // si le code postal est incorect alors on n'affiche rien
             }
         })
     }
