@@ -2,18 +2,20 @@
 require ('bdd.php');
 
 
+// si dans l'url la clé compared existe alors on récupère le GUID dans la table clients
 if (array_key_exists('compared', $_GET)) {
     $requeteCompared = $bdd->prepare('SELECT GUID FROM clients WHERE GUID = :GUID');
     $requeteCompared->execute(array(':GUID' => $_GET['q']));
     $compared = $requeteCompared->fetch();
     echo json_encode($compared);
-} else if (array_key_exists('q', $_GET)) {
+} else if (array_key_exists('q', $_GET)) {  // si dans l'url la clé q existe alors on récupère IsSociete dans la table guid
     $requeteurl = $bdd->prepare('SELECT IsSociete FROM guid WHERE GUID = :GUID');
     $requeteurl->execute(array(':GUID' => $_GET['q']));
     $url = $requeteurl->fetch();
     echo json_encode($url);
 }
 
+// si dans l'url la clé submit existe alors on envoie les données du formulaire dans la table clients
 if (array_key_exists('submit', $_GET)) {
     if (isset($url['IsSociete'])) {
         $civilite = $_POST['civilite'];
