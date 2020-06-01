@@ -4,6 +4,10 @@ require ('assets/requete/bdd.php');
 $requeteGuid = $bdd->prepare('SELECT * FROM guid WHERE GUID = :GUID');
 $requeteGuid->execute(array(':GUID' => $_GET['q']));
 $guid = $requeteGuid->fetch();
+
+$requeteCompared = $bdd->prepare('SELECT GUID FROM clients WHERE GUID = :GUID');
+$requeteCompared->execute(array(':GUID' => $_GET['q']));
+$compared = $requeteCompared->fetch();
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +32,23 @@ $guid = $requeteGuid->fetch();
             <div class="formulaire">
 
                 <?php if (isset($guid['IsSociete']) && $guid['IsSociete'] == 0): ?>
-                    <form action="">
+                    <div id="messageDebut" class="mt-5">
+                        <?php if (isset($compared['GUID']) == $_GET['q']) : ?>
+                        <div class="text-center alert alert-warning">
+                            <h2>Le formulaire a déjà été renseigné, veuillez contacter notre service mass-mailing pour plus d'informations</h2>
+                        </div>
+                        <?php else: ?>
+                        <div class="text-center alert alert-secondary">
+                            <h2>En remplissant le formulaire, vous gagnerez un bon d'achat</h2>
+                            <button id="goForm" class="btn btn-primary mt-3">Remplir le formulaire</button>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div id="mailIncorect" class="text-center alert alert-warning">
+                    </div>
+
+                    <form id="formDisplay" class="" action="">
                         <div id="submitError" class="alert alert-danger">
                             Le formulaire a déjà été envoyé
                         </div>
@@ -140,7 +160,20 @@ $guid = $requeteGuid->fetch();
                     </form>
 
                 <?php elseif (isset($guid['IsSociete']) && $guid['IsSociete'] == 1): ?>
-                    <form action="">
+                    <div id="messageDebut" class="mt-5">
+                        <?php if (isset($compared['GUID']) == $_GET['q']) : ?>
+                            <div class="text-center alert alert-warning">
+                                <h2>Le formulaire a déjà été renseigné, veuillez contacter notre service mass-mailing pour plus d'informations</h2>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center alert alert-secondary">
+                                <h2>En remplissant le formulaire, vous gagnerez un bon d'achat</h2>
+                                <button id="goForm" class="btn btn-primary mt-3">Remplir le formulaire</button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <form id="formDisplay" action="">
                         <div id="submitError" class="alert alert-danger">
                             Le formulaire a déjà été envoyé
                         </div>
@@ -264,7 +297,7 @@ $guid = $requeteGuid->fetch();
 
                 <?php elseif (!isset($guid['IsSociete'])): ?>
                     <div class="alert alert-danger mt-5">
-                        <h1 class="text-center">Une erreur est survenue</h1>
+                        <h1 class="text-center">Le lien n'existe pas, veuillez contacter notre service de mass-mailing pour plus d'informations</h1>
                     </div>
                 <?php endif; ?>
 

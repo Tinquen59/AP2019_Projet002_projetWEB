@@ -121,7 +121,7 @@ function verifNumTelParticulier() {
 }
 
 // permet d'envoyer le formulaire dans la base de donnée
-function envoiFormulaire() {
+function envoiFormulaire(elementEmail) {
     let compareGUID = url.split('=')    // Permet de récupérer que le GUID dans l'url sans la variable
     window.scrollTo(0, 0)   // Permet de remonter en haut de la page sans recharger la page
 
@@ -132,21 +132,34 @@ function envoiFormulaire() {
         xhrCompared.onload = function () {
             let responseCompared = JSON.parse(this.responseText)
 
-            if (compareGUID[1] === responseCompared.GUID) {
-                submitError.style.display = 'block'     // affiche une erreur si le formulaire a déjà été envoyer dans la base de donnée
-                submitSuccess.style.display = 'none'
-            } else {
-                let formData = new FormData(document.querySelector("form"))     //si le formulaire n'a pas encore été envoyé dans la base de donnée
+            if (elementEmail !== document.getElementById('mail')) {
+                formDisplay.style.display = 'none'
+                mailIncorect.style.display = 'block'
+                mailIncorect.innerHTML = `
+                        <h4 class="text-center">${document.getElementById('nom').value} ${document.getElementById('prenom').value}</h4>
+                        <p>L'adresse mail que vous avez saisie ne correspond pas à celle enregistrée</p>
+                        <p>Vous pouvez contacter notre service de mass-mailing pour avoir plus d'informations</p>
+                        <button id="goBackToForm" class="btn btn-primary">Retour au formulaire</button>
+                    `
+                mailIncorect.addEventListener('click', () => {
+                    formDisplay.style.display = 'block'
+                    mailIncorect.style.display = 'none'
+                    document.getElementById('mail').value = ''
+                })
+            } else
+                if (compareGUID[1] === responseCompared.GUID) {
+                    submitError.style.display = 'block'     // affiche une erreur si le formulaire a déjà été envoyer dans la base de donnée
+                    submitSuccess.style.display = 'none'
+                } else {
+                    let formData = new FormData(document.querySelector("form"))     //si le formulaire n'a pas encore été envoyé dans la base de donnée
 
-                let xhrPost = new XMLHttpRequest()
-                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')   // permet d'envoyer les données à la base de donnée
-                xhrPost.onload = function () {
+                    let xhrPost = new XMLHttpRequest()
+                    xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')   // permet d'envoyer les données à la base de donnée
+                    xhrPost.send(formData)
+                    submitSuccess.style.display = 'block'
+                    submitError.style.display = 'none'
+                    window.scrollTo(0, 0)   // Permet de remonter tout en haut de la page
                 }
-                xhrPost.send(formData)
-                submitSuccess.style.display = 'block'
-                submitError.style.display = 'none'
-                window.scrollTo(0, 0)   // Permet de remonter tout en haut de la page
-            }
         }
         xhrCompared.send()
     }
@@ -193,7 +206,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
             verifVille()
             verifNumTelParticulier()
 
-            envoiFormulaire()
+            envoiFormulaire(resultatIsSociete.Email)
 
         } else if (resultatIsSociete.IsSociete == 1) {  // même chose que précédemment mais pour le formulaire du professionelle
             const divFormGroup = document.querySelectorAll('div .divError')
@@ -248,3 +261,17 @@ submitError.style.display = 'none'
 
 let submitSuccess = document.getElementById('submitSuccess')
 submitSuccess.style.display = 'none'
+
+
+let formDisplay = document.getElementById('formDisplay')
+let goForm = document.getElementById('goForm')
+let messageDebut = document.getElementById('messageDebut')
+let mailIncorect = document.getElementById('mailIncorect')
+
+mailIncorect.style.display = 'none'
+formDisplay.style.display = 'none'
+
+goForm.addEventListener('click', () => {
+    messageDebut.style.display = 'none'
+    formDisplay.style.display = 'block'
+})
