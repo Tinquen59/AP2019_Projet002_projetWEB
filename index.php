@@ -48,14 +48,15 @@ $compared = $requeteCompared->fetch();
                     <div id="mailIncorect" class="text-center alert alert-warning">
                     </div>
 
-                    <form id="formDisplay" class="" action="">
-                        <div id="submitError" class="alert alert-danger">
-                            Le formulaire a déjà été envoyé
-                        </div>
+                    <div id="submitSuccess" class="text-center alert alert-success">
+                        Nous vous remercions d'avoir rempli le formulaire
+                    </div>
 
-                        <div id="submitSuccess" class="alert alert-success">
-                            Le formulaire a bien été envoyé
-                        </div>
+                    <div id="submitError" class="text-center alert alert-danger">
+                        Le formulaire a déjà été envoyé
+                    </div>
+
+                    <form id="formDisplay" class="" action="">
 
                         <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                             <div class="form-check form-check-inline col-sm-4">
@@ -128,19 +129,19 @@ $compared = $requeteCompared->fetch();
                             <div id="messageErrorNumTelParticulier" class="m-0"></div>
                         </div>
 
-                        <div class="form-group row divError mt-3">
+                        <div class="form-group row mt-3">
                             <label class="col-sm-4" for="telFixe">Téléphone fixe :</label>
                             <div class="col-sm-8">
                                 <input id="telFixe" name="telephoneFixe" class="form-control" type="text">
-                                <div class="messageError m-0"></div>
+                                <div class="messageErrorTel m-0"></div>
                             </div>
                         </div>
 
-                        <div class="form-group row divError">
+                        <div class="form-group row">
                             <label class="col-sm-4" for="telPortable">Téléphone portable :</label>
                             <div class="col-sm-8">
                                 <input id="telPortable" name="telephonePortable" class="form-control" type="text">
-                                <div class="messageError m-0"></div>
+                                <div class="messageErrorTel m-0"></div>
                             </div>
                         </div>
 
@@ -173,14 +174,18 @@ $compared = $requeteCompared->fetch();
                         <?php endif; ?>
                     </div>
 
-                    <form id="formDisplay" action="">
-                        <div id="submitError" class="alert alert-danger">
-                            Le formulaire a déjà été envoyé
-                        </div>
+                    <div id="mailIncorect" class="text-center alert alert-warning">
+                    </div>
 
-                        <div id="submitSuccess" class="alert alert-success">
-                            Le formulaire a bien été envoyé
-                        </div>
+                    <div id="submitSuccess" class="text-center alert alert-success">
+                        Nous vous remercions d'avoir rempli le formulaire
+                    </div>
+
+                    <div id="submitError" class="text-center alert alert-danger">
+                        Le formulaire a déjà été envoyé
+                    </div>
+
+                    <form id="formDisplay" action="">
 
                         <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                             <div class="form-check form-check-inline col-sm-4">
