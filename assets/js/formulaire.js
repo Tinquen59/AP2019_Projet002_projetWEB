@@ -18,14 +18,6 @@ let typeErrorsParticulier = [
         nameError: 'un code postal existant'
     },
     {
-        regexVerif: /^\d{10}$/i,
-        nameError: 'un numéro de téléphone valide'
-    },
-    {
-        regexVerif: /^\d{10}$/i,
-        nameError: 'un numéro de téléphone valide'
-    },
-    {
         regexVerif: /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/,
         nameError: 'un email valide'
     }
@@ -111,17 +103,29 @@ function verifVille() {
 // vérifie pour le particulier si au moins un numéro est rempli
 function verifNumTelParticulier() {
     let messageErrorNumTelParticulier = document.getElementById('messageErrorNumTelParticulier')
+    let inputTelFixe = document.getElementById('telFixe')
+    let inputTelPortable = document.getElementById('telPortable')
+    let messageErrorTel = document.getElementsByClassName('messageErrorTel')
+    let regexVerifTel = /^\d{10}$/i // va permettre de vérifier le champ numéro de téléphone avec les caractères souhaités
 
-    if (document.getElementById('telFixe').value.length < 10 || document.getElementById('telPortable').value.length < 10) {
+    if (!regexVerifTel.test(inputTelFixe.value) && !regexVerifTel.test(inputTelPortable.value)) {   // vérifie si aucun les deux input ne sont pas corrects
         messageErrorNumTelParticulier.innerHTML = '<p class="text-danger">Veuillez indiquer au moins un numéro de téléphone.</p>'
+        messageErrorTel[0].innerHTML = '<p class="text-danger m-0">un numéro de téléphone valide</p>'
+        inputTelFixe.style.borderColor = '#dc3545'
+        messageErrorTel[1].innerHTML = '<p class="text-danger m-0">un numéro de téléphone valide</p>'
+        inputTelPortable.style.borderColor = '#dc3545'
         countError.push(error)
-    } else {
+    } else if (regexVerifTel.test(inputTelFixe.value) && !regexVerifTel.test(inputTelPortable.value) || !regexVerifTel.test(inputTelFixe.value) && regexVerifTel.test(inputTelPortable.value)) { // vérifie si au moins un des deux input est correct
         messageErrorNumTelParticulier.innerHTML = ''
+        messageErrorTel[0].innerHTML = ''
+        inputTelFixe.style.borderColor = 'green'
+        messageErrorTel[1].innerHTML = ''
+        inputTelPortable.style.borderColor = 'green'
     }
 }
 
 // permet d'envoyer le formulaire dans la base de donnée
-function envoiFormulaire() {
+function envoiFormulaire(elementEmail) {
     let compareGUID = url.split('=')    // Permet de récupérer que le GUID dans l'url sans la variable
     window.scrollTo(0, 0)   // Permet de remonter en haut de la page sans recharger la page
 
@@ -132,21 +136,39 @@ function envoiFormulaire() {
         xhrCompared.onload = function () {
             let responseCompared = JSON.parse(this.responseText)
 
-            if (compareGUID[1] === responseCompared.GUID) {
-                submitError.style.display = 'block'     // affiche une erreur si le formulaire a déjà été envoyer dans la base de donnée
-                submitSuccess.style.display = 'none'
-            } else {
-                let formData = new FormData(document.querySelector("form"))     //si le formulaire n'a pas encore été envoyé dans la base de donnée
+            if (elementEmail !== document.getElementById('mail').value) {
+                formDisplay.style.display = 'none'
+                mailIncorect.style.display = 'block'
+                mailIncorect.innerHTML = `
+                        <h4 class="text-center">${document.getElementById('nom').value} ${document.getElementById('prenom').value}</h4>
+                        <p>L'adresse mail que vous avez saisie ne correspond pas à celle enregistrée dans notre base de données</p>
+                        <p>Vous pouvez contacter notre service de mass-mailing pour avoir plus d'informations</p>
+                        <button id="goBackToForm" class="btn btn-primary">Retour au formulaire</button>
+                    `
+                mailIncorect.addEventListener('click', () => {
+                    formDisplay.style.display = 'block'
+                    mailIncorect.style.display = 'none'
+                    submitError.style.display = 'none'
+                    document.getElementById('mail').value = ''
+                })
+            } else
+                if (compareGUID[1] === responseCompared.GUID) {
+                    formDisplay.style.display = 'none'
+                    submitError.style.display = 'block'     // affiche une erreur si le formulaire a déjà été envoyer dans la base de donnée
+                    submitSuccess.style.display = 'none'
+                    mailIncorect.style.display = 'none'
+                } else {
+                    let formData = new FormData(document.querySelector("form"))     //si le formulaire n'a pas encore été envoyé dans la base de donnée
 
-                let xhrPost = new XMLHttpRequest()
-                xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')   // permet d'envoyer les données à la base de donnée
-                xhrPost.onload = function () {
+                    let xhrPost = new XMLHttpRequest()
+                    xhrPost.open('POST', 'assets/requete/gestionnaire.php' + url + '&submit')   // permet d'envoyer les données à la base de donnée
+                    xhrPost.send(formData)
+                    formDisplay.style.display = 'none'
+                    submitSuccess.style.display = 'block'
+                    submitError.style.display = 'none'
+                    mailIncorect.style.display = 'none'
+                    window.scrollTo(0, 0)   // Permet de remonter tout en haut de la page
                 }
-                xhrPost.send(formData)
-                submitSuccess.style.display = 'block'
-                submitError.style.display = 'none'
-                window.scrollTo(0, 0)   // Permet de remonter tout en haut de la page
-            }
         }
         xhrCompared.send()
     }
@@ -193,7 +215,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
             verifVille()
             verifNumTelParticulier()
 
-            envoiFormulaire()
+            envoiFormulaire(resultatIsSociete.Email)
 
         } else if (resultatIsSociete.IsSociete == 1) {  // même chose que précédemment mais pour le formulaire du professionelle
             const divFormGroup = document.querySelectorAll('div .divError')
@@ -213,7 +235,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
             checkCivilite()
             verifVille()
 
-            envoiFormulaire()
+            envoiFormulaire(resultatIsSociete.Email)
 
         }
     }
@@ -248,3 +270,17 @@ submitError.style.display = 'none'
 
 let submitSuccess = document.getElementById('submitSuccess')
 submitSuccess.style.display = 'none'
+
+
+let formDisplay = document.getElementById('formDisplay')
+let goForm = document.getElementById('goForm')
+let messageDebut = document.getElementById('messageDebut')
+let mailIncorect = document.getElementById('mailIncorect')
+
+mailIncorect.style.display = 'none'
+formDisplay.style.display = 'none'
+
+goForm.addEventListener('click', () => {
+    messageDebut.style.display = 'none'
+    formDisplay.style.display = 'block'
+})

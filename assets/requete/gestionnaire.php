@@ -9,7 +9,7 @@ if (array_key_exists('compared', $_GET)) {
     $compared = $requeteCompared->fetch();
     echo json_encode($compared);
 } else if (array_key_exists('q', $_GET)) {  // si dans l'url la clé q existe alors on récupère IsSociete dans la table guid
-    $requeteurl = $bdd->prepare('SELECT IsSociete FROM guid WHERE GUID = :GUID');
+    $requeteurl = $bdd->prepare('SELECT * FROM guid WHERE GUID = :GUID');
     $requeteurl->execute(array(':GUID' => $_GET['q']));
     $url = $requeteurl->fetch();
     echo json_encode($url);

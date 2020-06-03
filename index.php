@@ -4,6 +4,10 @@ require ('assets/requete/bdd.php');
 $requeteGuid = $bdd->prepare('SELECT * FROM guid WHERE GUID = :GUID');
 $requeteGuid->execute(array(':GUID' => $_GET['q']));
 $guid = $requeteGuid->fetch();
+
+$requeteCompared = $bdd->prepare('SELECT GUID FROM clients WHERE GUID = :GUID');
+$requeteCompared->execute(array(':GUID' => $_GET['q']));
+$compared = $requeteCompared->fetch();
 ?>
 
 <!DOCTYPE html>
@@ -28,14 +32,31 @@ $guid = $requeteGuid->fetch();
             <div class="formulaire">
 
                 <?php if (isset($guid['IsSociete']) && $guid['IsSociete'] == 0): ?>
-                    <form action="">
-                        <div id="submitError" class="alert alert-danger">
-                            Le formulaire a déjà été envoyé
+                    <div id="messageDebut" class="mt-5">
+                        <?php if (isset($compared['GUID']) == $_GET['q']) : ?>
+                        <div class="text-center alert alert-warning">
+                            <h2>Le formulaire a déjà été renseigné, veuillez contacter notre service mass-mailing pour plus d'informations</h2>
                         </div>
+                        <?php else: ?>
+                        <div class="text-center alert alert-secondary">
+                            <h2>En remplissant le formulaire, vous gagnerez un bon d'achat</h2>
+                            <button id="goForm" class="btn btn-primary mt-3">Remplir le formulaire</button>
+                        </div>
+                        <?php endif; ?>
+                    </div>
 
-                        <div id="submitSuccess" class="alert alert-success">
-                            Le formulaire a bien été envoyé
-                        </div>
+                    <div id="mailIncorect" class="text-center alert alert-warning">
+                    </div>
+
+                    <div id="submitSuccess" class="text-center alert alert-success">
+                        Nous vous remercions d'avoir rempli le formulaire
+                    </div>
+
+                    <div id="submitError" class="text-center alert alert-danger">
+                        Le formulaire a déjà été envoyé
+                    </div>
+
+                    <form id="formDisplay" class="" action="">
 
                         <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                             <div class="form-check form-check-inline col-sm-4">
@@ -108,19 +129,19 @@ $guid = $requeteGuid->fetch();
                             <div id="messageErrorNumTelParticulier" class="m-0"></div>
                         </div>
 
-                        <div class="form-group row divError mt-3">
+                        <div class="form-group row mt-3">
                             <label class="col-sm-4" for="telFixe">Téléphone fixe :</label>
                             <div class="col-sm-8">
                                 <input id="telFixe" name="telephoneFixe" class="form-control" type="text">
-                                <div class="messageError m-0"></div>
+                                <div class="messageErrorTel m-0"></div>
                             </div>
                         </div>
 
-                        <div class="form-group row divError">
+                        <div class="form-group row">
                             <label class="col-sm-4" for="telPortable">Téléphone portable :</label>
                             <div class="col-sm-8">
                                 <input id="telPortable" name="telephonePortable" class="form-control" type="text">
-                                <div class="messageError m-0"></div>
+                                <div class="messageErrorTel m-0"></div>
                             </div>
                         </div>
 
@@ -140,14 +161,31 @@ $guid = $requeteGuid->fetch();
                     </form>
 
                 <?php elseif (isset($guid['IsSociete']) && $guid['IsSociete'] == 1): ?>
-                    <form action="">
-                        <div id="submitError" class="alert alert-danger">
-                            Le formulaire a déjà été envoyé
-                        </div>
+                    <div id="messageDebut" class="mt-5">
+                        <?php if (isset($compared['GUID']) == $_GET['q']) : ?>
+                            <div class="text-center alert alert-warning">
+                                <h2>Le formulaire a déjà été renseigné, veuillez contacter notre service mass-mailing pour plus d'informations</h2>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center alert alert-secondary">
+                                <h2>En remplissant le formulaire, vous gagnerez un bon d'achat</h2>
+                                <button id="goForm" class="btn btn-primary mt-3">Remplir le formulaire</button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
 
-                        <div id="submitSuccess" class="alert alert-success">
-                            Le formulaire a bien été envoyé
-                        </div>
+                    <div id="mailIncorect" class="text-center alert alert-warning">
+                    </div>
+
+                    <div id="submitSuccess" class="text-center alert alert-success">
+                        Nous vous remercions d'avoir rempli le formulaire
+                    </div>
+
+                    <div id="submitError" class="text-center alert alert-danger">
+                        Le formulaire a déjà été envoyé
+                    </div>
+
+                    <form id="formDisplay" action="">
 
                         <div id="civilite" class="form-group d-flex flex-column flex-sm-row">
                             <div class="form-check form-check-inline col-sm-4">
@@ -264,7 +302,7 @@ $guid = $requeteGuid->fetch();
 
                 <?php elseif (!isset($guid['IsSociete'])): ?>
                     <div class="alert alert-danger mt-5">
-                        <h1 class="text-center">Une erreur est survenue</h1>
+                        <h1 class="text-center">Le lien n'existe pas, veuillez contacter notre service de mass-mailing pour plus d'informations</h1>
                     </div>
                 <?php endif; ?>
 
