@@ -318,7 +318,7 @@ $compared = $requeteCompared->fetch();
 
                 <?php elseif (!isset($guid['IsSociete'])): ?>
                     <div class="alert alert-danger mt-5 font-italic">
-                        <h2>Le lien que vous venez d'utiliser est incorrecte</h2>
+                        <h2>Le lien que vous venez d'utiliser est incorrect</h2>
                         <p>Suggestions :</p>
                         <p class="text-center">Contacter le service de mass mailing pour plus d'information</p>
                     </div>
