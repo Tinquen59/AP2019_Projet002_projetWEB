@@ -5,9 +5,9 @@
 
 <?php
 // Connexion à la base de données (identifiant pour un serveur local)
-$bd = new PDO('mysql:host=localhost:3308;dbname=formulaire', 'root', '');
+$bd = new PDO('mysql:host=localhost;dbname=formulaire', 'root', '');
 
-// Requête de sélection des enregistrements dans la table 
+// Requête de sélection des enregistrements dans la table
 $r = $bd->query('SELECT * FROM guid, clients ');
 
 

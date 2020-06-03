@@ -34,13 +34,21 @@ $compared = $requeteCompared->fetch();
                 <?php if (isset($guid['IsSociete']) && $guid['IsSociete'] == 0): ?>
                     <div id="messageDebut" class="mt-5">
                         <?php if (isset($compared['GUID']) == $_GET['q']) : ?>
-                        <div class="text-center alert alert-warning">
-                            <h2>Le formulaire a déjà été renseigné, veuillez contacter notre service mass-mailing pour plus d'informations</h2>
+                        <div class="alert alert-warning">
+                            <h2>Cher client,</h2>
+                            <p>Formulaire déjà rempli, pour toutes autres questions</p>
+                            <p>veuillez vous rapprocher de notre service mass mailing pour des informations complémentaires.</p>
                         </div>
                         <?php else: ?>
-                        <div class="text-center alert alert-secondary">
-                            <h2>En remplissant le formulaire, vous gagnerez un bon d'achat</h2>
-                            <button id="goForm" class="btn btn-primary mt-3">Remplir le formulaire</button>
+                        <div class="alert alert-secondary">
+                            <h2>Cher Client,</h2>
+                            <p>Dans le but d'améliorer les services que nous pouvons vous offrir, et ainsi mieux comprendre vos besoins, un questionnaire est mit à votre disposition.</p>
+                            <p>Soucieux de votre bien-être, nous vous offrons un bon d'achat de 20 euros à valoir sans limite de temps.</p>
+                            <p>Vous trouverez ci-joint le bon d'achat ainsi que le formulaire à remplir</p>
+                            <p>Nous vous prions de bien agréer Monsieur, Madame nos salutations distinguées.</p>
+                            <div class="text-center">
+                                <button id="goForm" class="btn btn-primary mt-3">Bon d'achat</button>
+                            </div>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -163,13 +171,21 @@ $compared = $requeteCompared->fetch();
                 <?php elseif (isset($guid['IsSociete']) && $guid['IsSociete'] == 1): ?>
                     <div id="messageDebut" class="mt-5">
                         <?php if (isset($compared['GUID']) == $_GET['q']) : ?>
-                            <div class="text-center alert alert-warning">
-                                <h2>Le formulaire a déjà été renseigné, veuillez contacter notre service mass-mailing pour plus d'informations</h2>
+                            <div class="alert alert-warning">
+                                <h2>Cher client,</h2>
+                                <p>Formulaire déjà rempli, pour toutes autres questions</p>
+                                <p>veuillez vous rapprocher de notre service mass mailing pour des informations complémentaires.</p>
                             </div>
                         <?php else: ?>
-                            <div class="text-center alert alert-secondary">
-                                <h2>En remplissant le formulaire, vous gagnerez un bon d'achat</h2>
-                                <button id="goForm" class="btn btn-primary mt-3">Remplir le formulaire</button>
+                            <div class="alert alert-secondary">
+                                <h2>Cher Client,</h2>
+                                <p>Dans le but d'améliorer les services que nous pouvons vous offrir, et ainsi mieux comprendre vos besoins, un questionnaire est mit à votre disposition.</p>
+                                <p>Soucieux de votre bien-être, nous vous offrons un bon d'achat de 20 euros à valoir sans limite de temps.</p>
+                                <p>Vous trouverez ci-joint le bon d'achat ainsi que le formulaire à remplir</p>
+                                <p>Nous vous prions de bien agréer Monsieur, Madame nos salutations distinguées.</p>
+                                <div class="text-center">
+                                    <button id="goForm" class="btn btn-primary mt-3">Bon d'achat</button>
+                                </div>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -301,8 +317,10 @@ $compared = $requeteCompared->fetch();
                     </form>
 
                 <?php elseif (!isset($guid['IsSociete'])): ?>
-                    <div class="alert alert-danger mt-5">
-                        <h1 class="text-center">Le lien n'existe pas, veuillez contacter notre service de mass-mailing pour plus d'informations</h1>
+                    <div class="alert alert-danger mt-5 font-italic">
+                        <h2>Le lien que vous venez d'utiliser est incorrecte</h2>
+                        <p>Suggestions :</p>
+                        <p class="text-center">Contacter le service de mass mailing pour plus d'information</p>
                     </div>
                 <?php endif; ?>
 

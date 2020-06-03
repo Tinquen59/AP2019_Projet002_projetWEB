@@ -145,7 +145,7 @@ function envoiFormulaire(elementEmail) {
                         <p>Vous pouvez contacter notre service de mass-mailing pour avoir plus d'informations</p>
                         <button id="goBackToForm" class="btn btn-primary">Retour au formulaire</button>
                     `
-                mailIncorect.addEventListener('click', () => {
+                document.getElementById('goBackToForm').addEventListener('click', () => {
                     formDisplay.style.display = 'block'
                     mailIncorect.style.display = 'none'
                     submitError.style.display = 'none'
