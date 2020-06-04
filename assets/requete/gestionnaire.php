@@ -21,7 +21,7 @@ if (array_key_exists('submit', $_GET)) {
         $civilite = $_POST['civilite'];
         $prenom = htmlspecialchars($_POST['prenom']);
         $nom = htmlspecialchars($_POST['nom']);
-        if ($_POST['posteOccupe']) {
+        if (isset($_POST['posteOccupe'])) {
             $posteOccupe = htmlspecialchars($_POST['posteOccupe']);
         } else {
             $posteOccupe = null;
@@ -62,7 +62,7 @@ if (array_key_exists('submit', $_GET)) {
         }
         $email = htmlspecialchars($_POST['email']);
 
-        $requetePostDonnee = $bdd->prepare('INSERT INTO clients (Civilite, Prenom, Nom, PosteOccupe, Adresse1, Adresse2, TelephoneFixe, TelephonePortable, GUID, CodePostal, NomVille, NomSociete, TelephoneDirect, TelephoneSociete, Email) VALUES (:Civilite, :Prenom, :Nom, :PosteOccupe, :Adresse1, :Adresse2, :TelephoneFixe, :TelephonePortable, :GUID, :CodePostal, :NomVille, :NomSociete, :TelephoneDirect, :TelephoneSociete, :Email)');
+        $requetePostDonnee = $bdd->prepare('INSERT INTO clients (Civilite, Prenom, Nom, PosteOccupe, Adresse1, Adresse2, TelephoneFixe, TelephonePortable, GUID, CodePostal, NomVille, NomSociete, TelephoneDirect, TelephoneSociete, Email, IsOut) VALUES (:Civilite, :Prenom, :Nom, :PosteOccupe, :Adresse1, :Adresse2, :TelephoneFixe, :TelephonePortable, :GUID, :CodePostal, :NomVille, :NomSociete, :TelephoneDirect, :TelephoneSociete, :Email, 0)');
         $requetePostDonnee->execute(array(
             'Civilite' => $civilite,
             'Prenom' => $prenom,
